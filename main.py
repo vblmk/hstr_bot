@@ -9,8 +9,8 @@ user_state = {}  # {chat_id: {"topic_id": int, "questions": list, "current": int
 def connect_to_db():
     return pymysql.connect(
         host="localhost",
-        user="root",
-        password="2421Oleg",
+        user="vlbmk",
+        password="2421Oleg97",
         database="nmt_bot_db",
         cursorclass=pymysql.cursors.DictCursor,
         charset='utf8mb4'
