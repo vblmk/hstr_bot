@@ -1,20 +1,25 @@
+import logging
 import telebot
 from telebot import types
 import pymysql.cursors
 import math
 import random
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filename='bot.log')
 user_state = {}  # {chat_id: {"topic_id": int, "questions": list, "current": int, "correct": int, "wrong": int}}
 
-def connect_to_db():
-    return pymysql.connect(
-        host="localhost",
-        user="vlbmk",
-        password="2421Oleg97",
-        database="nmt_bot_db",
-        cursorclass=pymysql.cursors.DictCursor,
-        charset='utf8mb4'
-    )
+try:
+    def connect_to_db():
+        return pymysql.connect(
+            host="localhost",
+            user="root",
+            password="2421Oleg",
+            database="nmt_bot_db",
+            cursorclass=pymysql.cursors.DictCursor,
+            charset='utf8mb4'
+        )
+except Exception as e:
+    logging.error(f"Error connecting to the database: {e}")
 
 bot = telebot.TeleBot('6622496968:AAGF2eMIoTSow4Jj7g1XdktqTCG_rZ419b8')
 
