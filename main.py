@@ -23,6 +23,9 @@ except Exception as e:
 
 bot = telebot.TeleBot('7351062477:AAFgbaDJVq1oYnDzh_tvJEdG4P-3FIgtdoc')
 
+thanks_kb = types.InlineKeyboardMarkup(row_width=1)
+thanks_kb.add(types.InlineKeyboardButton("Підтримати", callback_data="thanks_btn"))
+
 @bot.message_handler(commands=['test'])
 def test(message):
     pass
@@ -34,9 +37,6 @@ def start(message):
 @bot.message_handler(commands=['weekstats'])
 def weekstats(message):
     connection = connect_to_db()
-
-    thanks_kb = types.InlineKeyboardMarkup(row_width=1)
-    thanks_kb.add(types.InlineKeyboardButton("Подякувати", callback_data="thanks_btn"))
 
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM results WHERE date >= NOW() - INTERVAL 6 DAY AND chat_id = %s", (message.chat.id,))
@@ -156,9 +156,6 @@ def send_question(chat_id, topic_name):
 
         connection = connect_to_db()
         state = user_state.get(chat_id)
-        
-        thanks_kb = types.InlineKeyboardMarkup(row_width=1)
-        thanks_kb.add(types.InlineKeyboardButton("Подякувати", callback_data="thanks_btn"))
         
         if state is None or state["current"] >= len(state["questions"]):
             bot.send_message(chat_id, f'🔹 Тест по темі "{topic_name}" завершено!\n'
