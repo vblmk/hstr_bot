@@ -30,6 +30,10 @@ thanks_kb.add(types.InlineKeyboardButton("Підтримати", callback_data="
 def test(message):
     pass
 
+@bot.message_handler(commands=['support'])
+def support(message):
+    bot.send_message(message.chat.id, "Якщо цей бот вам допоміг, ви можете підтримати його розробку, надіславши деяку суму на цей рахунок: https://send.monobank.ua/jar/W5t2VgkMu\nДякую за підтримку! 🙏")
+
 @bot.message_handler(commands=['start'])
 def start(message):
     bot.send_message(message.chat.id, "Привіт, я чат-бот для підготовки до НМТ з історії України.\nЯкщо ти готовий, напиши /quiz")
