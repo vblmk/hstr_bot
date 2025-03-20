@@ -1,0 +1,48 @@
+2025-03-18 21:00:10,958 - TeleBot - ERROR - Threaded polling exception: A request to the Telegram API was unsuccessful. Error code: 429. Description: Too Many Requests: retry after 24
+2025-03-18 21:00:10,961 - TeleBot - ERROR - Exception traceback:
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/telebot/__init__.py", line 1235, in __threaded_polling
+    self.worker_pool.raise_exceptions()
+  File "/usr/local/lib/python3.10/dist-packages/telebot/util.py", line 150, in raise_exceptions
+    raise self.exception_info
+  File "/usr/local/lib/python3.10/dist-packages/telebot/util.py", line 93, in run
+    task(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/telebot/__init__.py", line 9233, in _run_middlewares_and_handler
+    result = handler['function'](message)
+  File "/root/hstr_bot/main.py", line 371, in callback_handler
+    send_question(chat_id, topic_name=state["topic_name"])
+  File "/root/hstr_bot/main.py", line 253, in send_question
+    bot.send_message(chat_id, "❔ " + question['event'], reply_markup=answers_kb)
+  File "/usr/local/lib/python3.10/dist-packages/telebot/__init__.py", line 1800, in send_message
+    apihelper.send_message(
+  File "/usr/local/lib/python3.10/dist-packages/telebot/apihelper.py", line 275, in send_message
+    return _make_request(token, method_url, params=payload, method='post')
+  File "/usr/local/lib/python3.10/dist-packages/telebot/apihelper.py", line 168, in _make_request
+    json_result = _check_result(method_name, result)
+  File "/usr/local/lib/python3.10/dist-packages/telebot/apihelper.py", line 195, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 429. Description: Too Many Requests: retry after 24
+
+2025-03-18 21:00:11,530 - TeleBot - ERROR - Threaded polling exception: A request to the Telegram API was unsuccessful. Error code: 429. Description: Too Many Requests: retry after 23
+2025-03-18 21:00:11,530 - TeleBot - ERROR - Exception traceback:
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/telebot/__init__.py", line 1235, in __threaded_polling
+    self.worker_pool.raise_exceptions()
+  File "/usr/local/lib/python3.10/dist-packages/telebot/util.py", line 150, in raise_exceptions
+    raise self.exception_info
+  File "/usr/local/lib/python3.10/dist-packages/telebot/util.py", line 93, in run
+    task(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/telebot/__init__.py", line 9233, in _run_middlewares_and_handler
+    result = handler['function'](message)
+  File "/root/hstr_bot/main.py", line 367, in callback_handler
+    bot.send_message(chat_id, f"❌ {call.from_user.first_name}, невірно! Правильна відповідь: {correct_answer}")
+  File "/usr/local/lib/python3.10/dist-packages/telebot/__init__.py", line 1800, in send_message
+    apihelper.send_message(
+  File "/usr/local/lib/python3.10/dist-packages/telebot/apihelper.py", line 275, in send_message
+    return _make_request(token, method_url, params=payload, method='post')
+  File "/usr/local/lib/python3.10/dist-packages/telebot/apihelper.py", line 168, in _make_request
+    json_result = _check_result(method_name, result)
+  File "/usr/local/lib/python3.10/dist-packages/telebot/apihelper.py", line 195, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 429. Description: Too Many Requests: retry after 23
+
