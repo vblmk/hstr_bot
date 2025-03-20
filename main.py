@@ -21,7 +21,7 @@ try:
 except Exception as e:
     logging.error(f"Error connecting to the database: {e}")
 
-bot = telebot.TeleBot('6622496968:AAGF2eMIoTSow4Jj7g1XdktqTCG_rZ419b8')
+bot = telebot.TeleBot('7351062477:AAFgbaDJVq1oYnDzh_tvJEdG4P-3FIgtdoc')
 
 @bot.message_handler(commands=['test'])
 def test(message):
