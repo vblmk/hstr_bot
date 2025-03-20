@@ -35,6 +35,9 @@ def start(message):
 def weekstats(message):
     connection = connect_to_db()
 
+    thanks_kb = types.InlineKeyboardMarkup(row_width=1)
+    thanks_kb.add(types.InlineKeyboardButton("Подякувати", callback_data="thanks_btn"))
+
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM results WHERE date >= NOW() - INTERVAL 6 DAY AND chat_id = %s", (message.chat.id,))
         tests = cursor.fetchall()
@@ -65,11 +68,11 @@ def weekstats(message):
                 f"📊 <b>Статистика за останній тиждень</b>\n\n"
                 f"📌 <b>Теми:</b> \n{topics_list}\n"
                 f"\n✅ <b>Середній відсоток правильних відповідей: {avg_percentage:.1f}%</b>",
-                parse_mode="HTML"
+                parse_mode="HTML",
+                reply_markup=thanks_kb
             )
         else:
             bot.send_message(message.chat.id, "Немає відповідей для підрахунку.")
-
 
 @bot.message_handler(commands=['quiz'])
 def quiz_type_choice(message):
@@ -154,10 +157,14 @@ def send_question(chat_id, topic_name):
         connection = connect_to_db()
         state = user_state.get(chat_id)
         
+        thanks_kb = types.InlineKeyboardMarkup(row_width=1)
+        thanks_kb.add(types.InlineKeyboardButton("Подякувати", callback_data="thanks_btn"))
+        
         if state is None or state["current"] >= len(state["questions"]):
             bot.send_message(chat_id, f'🔹 Тест по темі "{topic_name}" завершено!\n'
                                     f"✅ Правильних відповідей: {state['correct']}\n"
-                                    f"❌ Неправильних відповідей: {state['wrong']}")
+                                    f"❌ Неправильних відповідей: {state['wrong']}",
+                                    reply_markup=thanks_kb)
             
             with connection.cursor() as cursor:
                 cursor.execute(f'INSERT INTO results (is_bytheme, chat_id, topic_id, correct_answers, incorrect_answers) VALUES ({True}, {chat_id}, {state["topic_id"]}, {state["correct"]}, {state["wrong"]})')
@@ -203,7 +210,8 @@ def send_question(chat_id, topic_name):
         if state is None or state["current"] >= len(state["questions"]):
             bot.send_message(chat_id, f'🔹 Тест по курсу завершено!\n'
                                     f"✅ Правильних відповідей: {state['correct']}\n"
-                                    f"❌ Неправильних відповідей: {state['wrong']}")
+                                    f"❌ Неправильних відповідей: {state['wrong']}",
+                                    reply_markup=thanks_kb)
 
             with connection.cursor() as cursor:
                 cursor.execute(
@@ -219,13 +227,8 @@ def send_question(chat_id, topic_name):
         question = state["questions"][qidx]
         correct_answer = question['date']
         topic_id = question['topic_id']
-        # answers = [correct_answer]
-
-        # all_dates = {q for q in state["questions"] if q["topic_id"] == state["topic_id"]}
-        # all_dates.add(correct_answer)
 
         with connection.cursor() as cursor:
-        # Отримуємо 3 випадкові дати з цієї ж теми, крім правильної відповіді
             cursor.execute(
                 "SELECT date FROM dates WHERE topic_id = %s AND date != %s ORDER BY RAND() LIMIT 3",
                 (topic_id, correct_answer)
@@ -233,7 +236,6 @@ def send_question(chat_id, topic_name):
             wrong_answers = [row['date'] for row in cursor.fetchall()]
 
         if len(wrong_answers) < 3:
-            # print(state["questions"])
             while len(wrong_answers) < 3:
                 fake_date = str(int(correct_answer.split(" ")[0]) + random.choice([-5, -4, -3, -2, -1, 1, 2, 3, 4, 5])) + " р."
                 if fake_date not in wrong_answers and fake_date != correct_answer:
@@ -254,6 +256,9 @@ def send_question(chat_id, topic_name):
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_handler(call):
+    if call.data == "thanks_btn":
+        bot.send_message(call.message.chat.id, "Якщо цей бот вам допоміг, ви можете підтримати його розробку, надіславши деяку суму на цей рахунок: https://send.monobank.ua/jar/W5t2VgkMu\nДякую за підтримку! 🙏")
+
     if call.data == "bycourse_choice":
         connection = connect_to_db()
 
